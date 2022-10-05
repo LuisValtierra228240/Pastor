@@ -32,6 +32,29 @@ public class ClienteDAO {
         }
         return clientes;
     }
+    
+    public static Cliente obtenerPorID(int id) {
+        Cliente c = new Cliente();
+        try {
+            Connection connection = Conexion.obtener();
+            String consulta = "SELECT id, nombre, direccion, telefono, email FROM cliente WHERE id = ?;";
+            PreparedStatement statement = connection.prepareStatement(consulta);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+
+                c.setId(resultSet.getInt(1));
+                c.setNombre(resultSet.getString(2));
+                c.setDireccion(resultSet.getString(3));
+                c.setTelefono(resultSet.getString(4));
+                c.setEmail(resultSet.getString(5));
+                
+            }
+        } catch (Exception e) {
+            System.err.print("Ocurrió un error: " + e.getMessage());
+        }
+        return c;
+    }
 
     public static boolean guardar(String nombre, String direccion, String telefono, String email) { // Guarda un cliente
         boolean resultado = false;
